@@ -1,67 +1,57 @@
-import React, { useEffect, useState } from 'react';
-import RoleList from './features/RoleList';
-import EditPermissionsModal from './features/EditPermissionsModal';
-import { MockRoleService } from './services/RoleService';
-import { Role, Permission } from './services/types';
-import { Toaster } from 'react-hot-toast';
-
-const roleService = new MockRoleService();
+import React, { useEffect } from 'react';
+import RoleList from './components/RoleList/RoleList';
+import EditPermissionsModal from './components/RoleList/EditPermissionsModal';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from './store';
+import {
+  fetchRoles,
+  fetchPermissions,
+  updateRolePermissions,
+} from './features/rolesSlice';
 
 const App: React.FC = () => {
-  // State
-  const [roles, setRoles] = useState<Role[]>([]);
-  const [permissions, setPermissions] = useState<Permission[]>([]);
-  const [selectedRole, setSelectedRole] = useState<Role | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const dispatch = useDispatch<AppDispatch>();
+  const { roles, permissions, loading, error } = useSelector((state: RootState) => state.roles);
+  const [selectedRole, setSelectedRole] = React.useState<string | null>(null);
 
-  // Fetch initial data
   useEffect(() => {
-    roleService.getRoles()
-      .then(setRoles)
-      .catch(err => setError(err.message));
+    dispatch(fetchRoles());
+    dispatch(fetchPermissions());
+  }, [dispatch]);
 
-    roleService.getPermissions()
-      .then(setPermissions)
-      .catch(err => setError(err.message));
-  }, []);
-
-  // Handler to open modal
-  const handleEdit = (role: Role) => {
-    setSelectedRole(role);
-    setIsModalOpen(true);
+  const handleEdit = (roleId: string) => {
+    // Prevent opening modal before permissions are loaded
+    if (permissions.length === 0 && !loading) {
+      dispatch(fetchPermissions());
+    }
+    setSelectedRole(roleId);
   };
 
-  // Handler for saving updated permissions
-  const handleSave = (updatedPermissions: Permission[]) => {
-    if (!selectedRole) return;
-    roleService.setPermissionsForRole(selectedRole.id, updatedPermissions)
-      .then(updatedRole => {
-        setRoles(prev =>
-          prev.map(r => (r.id === updatedRole.id ? updatedRole : r))
-        );
-        setIsModalOpen(false);
-        setSelectedRole(null);
-      })
-      .catch(err => setError(err.message));
+  const handleSave = (updated: typeof permissions) => {
+    if (selectedRole) dispatch(updateRolePermissions({ roleId: selectedRole, permissions: updated }));
+    setSelectedRole(null);
   };
 
   return (
-    
     <div className="p-6">
-      <Toaster position="top-right" />
       <h1 className="text-2xl font-bold mb-4">Roles & Permissions</h1>
+      <RoleList roles={roles} onEdit={(r) => handleEdit(r.id)} />
 
-      <RoleList roles={roles} onEdit={handleEdit} />
-
+      {/* Show modal only when permissions are available or indicate loading */}
       {selectedRole && (
-        <EditPermissionsModal
-          isOpen={isModalOpen}
-          role={selectedRole}
-          allPermissions={permissions}
-          onClose={() => setIsModalOpen(false)}
-          onSave={handleSave}
-        />
+        permissions.length > 0 ? (
+          <EditPermissionsModal
+            isOpen={!!selectedRole}
+            role={roles.find(r => r.id === selectedRole)!}
+            allPermissions={permissions}
+            onClose={() => setSelectedRole(null)}
+            onSave={handleSave}
+          />
+        ) : (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <p className="text-white">Loading permissions...</p>
+          </div>
+        )
       )}
     </div>
   );

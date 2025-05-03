@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Role, Permission } from '../services/types';
+import { Role, Permission } from '../../services/types';
 import { motion } from 'framer-motion';
 import { X } from 'lucide-react';
 

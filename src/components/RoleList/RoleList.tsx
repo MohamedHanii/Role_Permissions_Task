@@ -1,5 +1,5 @@
 import React from 'react';
-import { Role } from '../services/types';
+import { Role } from '../../services/types';
 import { motion } from 'framer-motion';
 import { Edit2 } from 'lucide-react';
 
