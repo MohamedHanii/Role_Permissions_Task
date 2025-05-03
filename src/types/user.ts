@@ -1,8 +1,6 @@
-import { Role } from './role';
+import { RoleId } from "./role";
 
 export type User = {
-  id: string;
-  username: string;
-  password: string;
-  role: Role;
-};
+    username: string;
+    role: RoleId;
+  };
