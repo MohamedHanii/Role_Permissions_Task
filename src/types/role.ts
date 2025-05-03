@@ -11,12 +11,3 @@ export type Role = {
   name: string;
   permissions: Permission[];
 };
-
-export interface RoleService {
-  getRoles(): Promise<Role[]>;
-  getPermissions(): Promise<Permission[]>;
-  setPermissionsForRole(
-    roleId: RoleId,
-    permissions: Permission[]
-  ): Promise<Role>;
-}

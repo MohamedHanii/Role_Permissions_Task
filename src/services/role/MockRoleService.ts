@@ -1,11 +1,11 @@
 import {
-    Permission,
-    Role,
-    RoleService,
-    RoleId,
-    PermissionId,
-  } from "./types";
-  
+  Permission,
+  Role,
+} from "../../types/role";
+
+import { RoleService }from "./RoleService"
+
+import { delayedRandomlyRejectingPromise } from "../../utils/delayed";
 
   const demoRoles: Role[] = [
     {
@@ -40,28 +40,6 @@ import {
   },
 ];
 
-  const randomTimeout = (): number => {
-    const max = 1000;
-    const min = 200;
-    return Math.random() * (max - min) + min;
-  };
-
-  const delayedRandomlyRejectingPromise = <T>(handler: () => T) => {
-    return new Promise<T>((resolve, reject) => {
-      setTimeout(() => {
-        if (Math.random() > 0.75) {
-          return reject(new Error("random error"));
-        }
-        try {
-          resolve(handler());
-        } catch (error) {
-          reject(error);
-        }
-      }, randomTimeout());
-    });
-  };
-  
-  // the class
   export class MockRoleService implements RoleService {
     private readonly roleState: Role[] = [...demoRoles];
     private readonly permissionState: Permission[] = [...demoPermissions];
