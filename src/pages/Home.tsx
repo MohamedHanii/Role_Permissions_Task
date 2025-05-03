@@ -1,72 +1,72 @@
 import React, { useEffect, useState } from 'react';
 import RoleList from '../components/Role/RoleList';
-import { MockRoleService } from '../services/Role/MockRoleService';
-import { Permission, Role } from '../types/role';
-import { toast } from 'react-toastify';
 import EditPermissionsModal from '../components/Role/EditPermissionsModal';
 import NavBar from '../components/layouts/Navbar';
+import { toast } from 'react-toastify';
+import { useSelector, useDispatch } from 'react-redux';
+import type { RootState, AppDispatch } from '../store';
+import {
+  fetchRoles,
+  fetchPermissions,
+  savePermissions as updateRolePermissions,
+} from '../store/rolesSlice';
+import { Role, Permission } from '../types/role';
 
-const Dashboard: React.FC = () => {
-    const [roles, setRoles] = useState<Role[]>([]);
-    const [permissions, setPermissions] = useState<Permission[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [selectedRole, setSelectedRole] = useState<Role | null>(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const roleService = new MockRoleService();
-  
-    useEffect(() => {
-      // Fetch roles and permissions in parallel
-      Promise.all([roleService.getRoles(), roleService.getPermissions()])
-        .then(([fetchedRoles, fetchedPermissions]) => {
-          setRoles(fetchedRoles);
-          setPermissions(fetchedPermissions);
-        })
-        .catch(err => {
-          toast.error(err.message || 'Failed to load data');
-        })
-        .finally(() => setLoading(false));
-    }, []);
-  
-    const handleEdit = (role: Role) => {
-      setSelectedRole(role);
-      setIsModalOpen(true);
-    };
-  
-    const handleSave = (updatedPermissions: Permission[]) => {
-      if (!selectedRole) return;
-      roleService.setPermissionsForRole(selectedRole.id, updatedPermissions)
-        .then(updatedRole => {
-          setRoles(prev => prev.map(r => r.id === updatedRole.id ? updatedRole : r));
-          toast.success(`Permissions updated for ${updatedRole.name}`);
-        })
-        .catch(err => toast.error(err.message || 'Failed to update permissions'))
-        .finally(() => {
-          setIsModalOpen(false);
-          setSelectedRole(null);
-        });
-    };
-  
-    if (loading) return <p className="p-6 text-center">Loading roles…</p>;
-  
-    return (
-        <div>
-            <NavBar />
-            <div className="p-6">
-                <h1 className="text-2xl font-bold mb-4">Roles & Permissions</h1>
-                <RoleList roles={roles} onEdit={handleEdit} />
-                    {selectedRole && (
-                    <EditPermissionsModal
-                    isOpen={isModalOpen}
-                    role={selectedRole}
-                    allPermissions={permissions}
-                    onClose={() => { setIsModalOpen(false); setSelectedRole(null); }}
-                    onSave={handleSave}
-                />
-                )}
-            </div>
-        </div>
-    );
+const Home: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { roles, permissions, loading, error } = useSelector((state: RootState) => state.roles);
+  const [selectedRoleId, setSelectedRoleId] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Initial fetch
+  useEffect(() => {
+    dispatch(fetchRoles());
+    dispatch(fetchPermissions());
+  }, [dispatch]);
+
+  // Show errors
+  useEffect(() => {
+    if (error) toast.error(error);
+  }, [error]);
+
+  const handleEdit = (role: Role) => {  
+    console.log(permissions);
+
+    setSelectedRoleId(role.id);
+    setIsModalOpen(true);
   };
-  
-  export default Dashboard;
-  
+
+  const handleSave = (updated: Permission[]) => {
+    if (!selectedRoleId) return;
+    dispatch(updateRolePermissions({ roleId: selectedRoleId, permissions: updated }))
+      .unwrap()
+      .then(() => toast.success('Permissions updated'))
+      .catch(e => toast.error(e.message));
+
+    setIsModalOpen(false);
+    setSelectedRoleId(null);
+  };
+
+  if (loading) return <p className="p-6 text-center">Loading roles…</p>;
+
+  return (
+    <div>
+      <NavBar />
+      <div className="p-6">
+        <h1 className="text-2xl font-bold mb-4">Roles & Permissions</h1>
+        <RoleList roles={roles} onEdit={handleEdit} />
+        {selectedRoleId && (
+          <EditPermissionsModal
+            isOpen={isModalOpen}
+            role={roles.find(r => r.id === selectedRoleId)!}
+            allPermissions={permissions}
+            onClose={() => { setIsModalOpen(false); setSelectedRoleId(null); }}
+            onSave={handleSave}
+          />
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Home;

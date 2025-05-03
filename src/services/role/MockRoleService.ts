@@ -3,7 +3,7 @@ import {
   Role,
 } from "../../types/role";
 
-import { RoleService }from "./RoleService"
+import { RoleService } from "./RoleService"
 
 import { delayedRandomlyRejectingPromise } from "../../utils/delayed";
 
