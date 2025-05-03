@@ -3,6 +3,7 @@ import RoleList from './features/RoleList';
 import EditPermissionsModal from './features/EditPermissionsModal';
 import { MockRoleService } from './services/RoleService';
 import { Role, Permission } from './services/types';
+import { Toaster } from 'react-hot-toast';
 
 const roleService = new MockRoleService();
 
@@ -46,9 +47,11 @@ const App: React.FC = () => {
   };
 
   return (
+    
     <div className="p-6">
+      <Toaster position="top-right" />
       <h1 className="text-2xl font-bold mb-4">Roles & Permissions</h1>
-      {error && <p className="text-red-600">Error: {error}</p>}
+
       <RoleList roles={roles} onEdit={handleEdit} />
 
       {selectedRole && (

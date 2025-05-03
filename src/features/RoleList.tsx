@@ -1,39 +1,55 @@
 import React from 'react';
 import { Role } from '../services/types';
+import { motion } from 'framer-motion';
+import { Edit2 } from 'lucide-react';
 
 export interface RoleListProps {
-  /** Array of roles to display */
   roles: Role[];
-  /** Callback when user clicks Edit on a role */
   onEdit: (role: Role) => void;
 }
 
 const RoleList: React.FC<RoleListProps> = ({ roles, onEdit }) => {
   return (
-    <div className="space-y-4">
-      {roles.map((role) => (
-        <div
-          key={role.id}
-          className="p-4 bg-white shadow rounded-lg flex justify-between items-center"
-        >
-          <div>
-            <h2 className="text-lg font-semibold">{role.name}</h2>
-            <p className="text-gray-600">
-              Permissions:{' '}
-              {role.permissions.length > 0
-                ? role.permissions.map((p) => p.name).join(', ')
-                : 'None'}
-            </p>
-          </div>
-          <button
-            onClick={() => onEdit(role)}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={{
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+      }}
+      className="space-y-4"
+    >
+      {roles.length ? (
+        roles.map((role) => (
+          <motion.div
+            key={role.id}
+            className="p-4 bg-white shadow-lg rounded-2xl flex justify-between items-center hover:shadow-2xl transition-shadow"
+            whileHover={{ scale: 1.02 }}
+            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
           >
-            Edit
-          </button>
+            <div>
+              <h2 className="text-xl font-semibold mb-1">{role.name}</h2>
+              <p className="text-gray-600 text-sm">
+                Permissions: {role.permissions.length > 0
+                  ? role.permissions.map((p) => p.name).join(', ')
+                  : 'None'}
+              </p>
+            </div>
+            <button
+              onClick={() => onEdit(role)}
+              className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-2xl hover:bg-blue-700 transition"
+            >
+              <Edit2 size={16} />
+              <span>Edit</span>
+            </button>
+          </motion.div>
+        ))
+      ) : (
+        <div className="p-6 bg-yellow-50 border border-yellow-200 rounded-lg text-center">
+          <p className="text-yellow-800">No roles found.</p>
         </div>
-      ))}
-    </div>
+      )}
+    </motion.div>
   );
 };
 
