@@ -32,7 +32,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.removeItem('currentUser');
   };
 
-  if (loading) return null; // or spinner
+  if (loading) return null;
 
   return (
     <AuthContext.Provider value={{ user, login, logout }}>

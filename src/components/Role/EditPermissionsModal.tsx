@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { Role, Permission } from '../../types/role';
 
 export interface EditPermissionsModalProps {
@@ -9,16 +8,6 @@ export interface EditPermissionsModalProps {
   onClose: () => void;
   onSave: (updated: Permission[]) => void;
 }
-
-const backdrop = {
-  visible: { opacity: 1 },
-  hidden: { opacity: 0 },
-};
-
-const modal = {
-  hidden: { opacity: 0, y: '-100vh' },
-  visible: { opacity: 1, y: '0', transition: { delay: 0.2 } },
-};
 
 const EditPermissionsModal: React.FC<EditPermissionsModalProps> = ({
   isOpen,
@@ -30,12 +19,12 @@ const EditPermissionsModal: React.FC<EditPermissionsModalProps> = ({
   const [selected, setSelected] = useState<Set<string>>(new Set());
 
   useEffect(() => {
-    const initial = new Set(role.permissions.map(p => p.id));
+    const initial = new Set(role.permissions.map((p) => p.id));
     setSelected(initial);
   }, [role]);
 
   const toggle = (id: string) => {
-    setSelected(prev => {
+    setSelected((prev) => {
       const copy = new Set(prev);
       copy.has(id) ? copy.delete(id) : copy.add(id);
       return copy;
@@ -43,31 +32,31 @@ const EditPermissionsModal: React.FC<EditPermissionsModalProps> = ({
   };
 
   const handleSave = () => {
-    const updated = allPermissions.filter(p => selected.has(p.id));
+    const updated = allPermissions.filter((p) => selected.has(p.id));
     onSave(updated);
   };
 
   if (!isOpen) return null;
 
   return (
-    <motion.div
-      className="fixed top-0 left-0 w-full h-full bg-gray-500/50 flex items-center justify-center z-50"
-      variants={backdrop}
-      initial="hidden"
-      animate="visible"
-      exit="hidden"
+    <div
+      className="fixed inset-0 bg-gray-500/50 flex items-center justify-center z-50"
       onClick={onClose}
     >
-      <motion.div
-        className="bg-white rounded-lg shadow-lg w-full max-w-md p-6"
-        variants={modal}
-        onClick={e => e.stopPropagation()}
+      <div
+        className="bg-white rounded-lg shadow w-full max-w-md p-6"
+        onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-xl font-semibold mb-4">Edit Permissions for {role.name}</h2>
+        <h2 className="text-xl font-semibold mb-4">
+          Edit Permissions for {role.name}
+        </h2>
 
         <div className="space-y-2 max-h-60 overflow-y-auto mb-4">
-          {allPermissions.map(permission => (
-            <label key={permission.id} className="flex items-center p-2 hover:bg-gray-100 rounded">
+          {allPermissions.map((permission) => (
+            <label
+              key={permission.id}
+              className="flex items-center p-2 hover:bg-gray-100 rounded"
+            >
               <input
                 type="checkbox"
                 checked={selected.has(permission.id)}
@@ -93,8 +82,8 @@ const EditPermissionsModal: React.FC<EditPermissionsModalProps> = ({
             Save
           </button>
         </div>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 };
 

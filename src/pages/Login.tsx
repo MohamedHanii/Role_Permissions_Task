@@ -10,7 +10,6 @@ const Login: React.FC = () => {
   const { user, login } = useAuth();
   const navigate = useNavigate();
 
-  // 🔁 If user is already logged in, redirect to home
   useEffect(() => {
     if (user) {
       navigate('/', { replace: true });
@@ -29,7 +28,7 @@ const Login: React.FC = () => {
       setLoading(true);
       await login(username, password);
       toast.success(`Welcome, ${username}!`);
-      navigate('/', { replace: true }); // redirect after login
+      navigate('/', { replace: true });
     } catch (err: any) {
       toast.error(err.message || 'Login failed');
     } finally {

@@ -18,20 +18,17 @@ const Home: React.FC = () => {
   const [selectedRoleId, setSelectedRoleId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Initial fetch
   useEffect(() => {
     dispatch(fetchRoles());
     dispatch(fetchPermissions());
   }, [dispatch]);
 
-  // Show errors
   useEffect(() => {
     if (error) toast.error(error);
   }, [error]);
 
-  const handleEdit = (role: Role) => {  
-    console.log(permissions);
 
+  const handleEdit = (role: Role) => {
     setSelectedRoleId(role.id);
     setIsModalOpen(true);
   };
@@ -48,7 +45,7 @@ const Home: React.FC = () => {
   };
 
   if (loading) return <p className="p-6 text-center">Loading roles…</p>;
-
+  
   return (
     <div>
       <NavBar />

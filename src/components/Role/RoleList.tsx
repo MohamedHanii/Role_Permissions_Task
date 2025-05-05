@@ -1,7 +1,5 @@
 import React from 'react';
 import { Role } from '../../types/role';
-import { motion } from 'framer-motion';
-import { Edit2 } from 'lucide-react';
 
 export interface RoleListProps {
   roles: Role[];
@@ -18,41 +16,30 @@ const RoleList: React.FC<RoleListProps> = ({ roles, onEdit }) => {
   }
 
   return (
-    <motion.div
-      initial="hidden"
-      animate="visible"
-      variants={{
-        hidden: { opacity: 0 },
-        visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
-      }}
-      className="space-y-4"
-    >
-      {roles.map(role => (
-        <motion.div
+    <div className="space-y-4">
+      {roles.map((role) => (
+        <div
           key={role.id}
-          className="p-4 bg-white shadow-lg rounded-2xl flex justify-between items-center hover:shadow-2xl transition-shadow"
-          whileHover={{ scale: 1.02 }}
-          variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+          className="p-4 bg-white border rounded-lg flex justify-between items-center"
         >
           <div>
             <h2 className="text-xl font-semibold mb-1">{role.name}</h2>
             <p className="text-gray-600 text-sm">
               Permissions:{' '}
               {role.permissions.length > 0
-                ? role.permissions.map(p => p.name).join(', ')
+                ? role.permissions.map((p) => p.name).join(', ')
                 : 'None'}
             </p>
           </div>
           <button
             onClick={() => onEdit(role)}
-            className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-2xl hover:bg-blue-700 transition"
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
-            <Edit2 size={16} />
-            <span>Edit</span>
+            Edit
           </button>
-        </motion.div>
+        </div>
       ))}
-    </motion.div>
+    </div>
   );
 };
 
