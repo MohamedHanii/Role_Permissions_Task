@@ -1,54 +1,144 @@
-# React + TypeScript + Vite
+# Role Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern React TypeScript application for managing user roles and permissions with a clean, responsive UI.
 
-Currently, two official plugins are available:
+## Running the Project
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+1. Install dependencies:
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+2. Start the development server:
+```bash
+npm run dev
 ```
+
+The application will be available at `http://localhost:5173`
+
+## Demo Credentials
+
+The system comes with pre-configured demo users that you can use to test different access levels:
+
+```typescript
+// Available demo users:
+{
+  username: "admin",
+  password: "admin123"
+},
+{
+  username: "user",
+  password: "user123"
+},
+{
+  username: "guest",
+  password: "guest123"
+}
+```
+
+## Project Structure
+
+```
+src/
+├── components/          # Reusable UI components
+│   ├── Role/           # Role-related components
+│   │   ├── RoleList.tsx           # List of roles with permissions
+│   │   └── EditPermissionsModal.tsx # Modal for editing role permissions
+│   ├── layouts/        # Layout components
+│   │   └── Navbar.tsx  # Navigation component
+│   └── shared/         # Shared/common components
+├── pages/              # Page components
+│   ├── Home.tsx       # Main dashboard page
+│   └── Login.tsx      # Authentication page
+├── store/              # Redux store configuration
+│   ├── index.ts       # Store setup
+│   └── rolesSlice.ts  # Role management state
+├── services/           # API services
+│   ├── Role/          # Role-related services
+│   └── auth/          # Authentication services
+├── providers/          # React context providers
+│   └── Auth/          # Authentication context
+├── utils/              # Utility functions
+└── types/              # TypeScript type definitions
+```
+
+## Running Tests
+
+The project includes unit tests for services and utilities.
+
+Run all tests:
+```bash
+npm test
+```
+
+Run tests with coverage report:
+```bash
+npm test -- --coverage
+```
+
+Run specific test suites:
+```bash
+# Test authentication service
+npm test src/services/auth/MockAuthService.test.ts
+
+# Test role service
+npm test src/services/Role/MockRoleService.test.ts
+
+# Test utility functions
+npm test src/utils/delayed.test.ts
+```
+
+### Service Tests
+
+The service tests verify the core business logic:
+
+1. Authentication Service Tests:
+   - User login validation
+   - Session management
+   - Token handling
+   - Error scenarios for invalid credentials
+
+2. Role Service Tests:
+   - Fetching roles and permissions
+   - Updating role permissions
+   - Error handling for invalid operations
+   - Simulated network delays and failures
+
+3. Utility Function Tests:
+   - Delayed promise resolution
+   - Random rejection simulation
+   - Error handling utilities
+
+## Tech Stack
+
+- React 18
+- TypeScript
+- Redux Toolkit for state management
+
+## Features
+
+-  Role-based access control management
+-  User role assignment and modification
+
+## Project Development Journey
+
+The project was developed in several phases:
+
+1. First, I implemented the core role management functionality:
+   - Created the RoleList component for displaying roles and their permissions
+   - Developed the EditPermissionsModal for modifying role permissions
+   - Implemented real-time updates using Redux
+
+2. Added authentication system:
+   - Login page with form validation
+   - Protected routes
+   - User session management
+
+3. Future Enhancements:
+   - Initially planned to implement a feature where permission changes would directly affect user visibility and editability of roles
+   - Considered using Redux Persist to maintain state between sessions
+   - These features would require backend integration and were deemed out of scope for the current project phase
+   - The current implementation focuses on demonstrating frontend capabilities and state management
+
+

@@ -40,14 +40,17 @@ const EditPermissionsModal: React.FC<EditPermissionsModalProps> = ({
 
   return (
     <div
+      data-testid="modal-backdrop"
       className="fixed inset-0 bg-gray-500/50 flex items-center justify-center z-50"
       onClick={onClose}
     >
       <div
+        role="dialog"
+        aria-labelledby="modal-title"
         className="bg-white rounded-lg shadow w-full max-w-md p-6"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-xl font-semibold mb-4">
+        <h2 id="modal-title" className="text-xl font-semibold mb-4">
           Edit Permissions for {role.name}
         </h2>
 
