@@ -77,18 +77,6 @@ Run tests with coverage report:
 npm test -- --coverage
 ```
 
-Run specific test suites:
-```bash
-# Test authentication service
-npm test src/services/auth/MockAuthService.test.ts
-
-# Test role service
-npm test src/services/Role/MockRoleService.test.ts
-
-# Test utility functions
-npm test src/utils/delayed.test.ts
-```
-
 ### Service Tests
 
 The service tests verify the core business logic:
