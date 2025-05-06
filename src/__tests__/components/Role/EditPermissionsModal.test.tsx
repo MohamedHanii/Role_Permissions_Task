@@ -54,15 +54,12 @@ describe('EditPermissionsModal Component', () => {
       />
     );
 
-    // Check modal title
     expect(screen.getByText(`Edit Permissions for ${sampleRole.name}`)).toBeInTheDocument();
 
-    // Check all permissions are listed
     allPermissions.forEach(permission => {
       expect(screen.getByLabelText(permission.name)).toBeInTheDocument();
     });
 
-    // Check buttons are present
     expect(screen.getByText('Cancel')).toBeInTheDocument();
     expect(screen.getByText('Save')).toBeInTheDocument();
   });
@@ -78,7 +75,6 @@ describe('EditPermissionsModal Component', () => {
       />
     );
 
-    // Check that initial permissions are checked
     const createUsersCheckbox = screen.getByLabelText('Create Users') as HTMLInputElement;
     const deleteUsersCheckbox = screen.getByLabelText('Delete Users') as HTMLInputElement;
     const viewContentCheckbox = screen.getByLabelText('View Content') as HTMLInputElement;
@@ -102,11 +98,9 @@ describe('EditPermissionsModal Component', () => {
     const createUsersCheckbox = screen.getByLabelText('Create Users');
     const viewContentCheckbox = screen.getByLabelText('View Content');
 
-    // Uncheck an initially checked permission
     await userEvent.click(createUsersCheckbox);
     expect(createUsersCheckbox).not.toBeChecked();
 
-    // Check an initially unchecked permission
     await userEvent.click(viewContentCheckbox);
     expect(viewContentCheckbox).toBeChecked();
   });
@@ -122,14 +116,10 @@ describe('EditPermissionsModal Component', () => {
       />
     );
 
-    // Toggle some permissions
-    await userEvent.click(screen.getByLabelText('Create Users')); // Uncheck
-    await userEvent.click(screen.getByLabelText('View Content')); // Check
-
-    // Click save
+    await userEvent.click(screen.getByLabelText('Create Users'));
+    await userEvent.click(screen.getByLabelText('View Content'));
     await userEvent.click(screen.getByText('Save'));
 
-    // Expect onSave to be called with the updated permissions
     expect(mockOnSave).toHaveBeenCalledWith([
       { id: 'p2', name: 'Delete Users' },
       { id: 'p3', name: 'View Content' }
@@ -162,7 +152,6 @@ describe('EditPermissionsModal Component', () => {
       />
     );
 
-    // Click the backdrop (the outer div)
     const backdrop = screen.getByTestId('modal-backdrop');
     await userEvent.click(backdrop);
     
@@ -180,7 +169,6 @@ describe('EditPermissionsModal Component', () => {
       />
     );
 
-    // Check modal container styling
     const modalContainer = screen.getByTestId('modal-backdrop');
     expect(modalContainer).toHaveClass(
       'fixed',
@@ -192,7 +180,6 @@ describe('EditPermissionsModal Component', () => {
       'z-50'
     );
 
-    // Check modal content styling
     const modalContent = screen.getByRole('dialog');
     expect(modalContent).toHaveClass(
       'bg-white',
@@ -202,8 +189,7 @@ describe('EditPermissionsModal Component', () => {
       'max-w-md',
       'p-6'
     );
-
-    // Check buttons styling
+    
     const saveButton = screen.getByText('Save');
     expect(saveButton).toHaveClass(
       'px-4',

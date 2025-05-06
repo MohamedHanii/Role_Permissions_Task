@@ -36,12 +36,10 @@ describe('RoleList Component', () => {
 
   it('renders a list of roles with their permissions', () => {
     render(<RoleList roles={sampleRoles} onEdit={mockOnEdit} />);
-    
-    // Check if role names are rendered
+
     expect(screen.getByText('Admin')).toBeInTheDocument();
     expect(screen.getByText('User')).toBeInTheDocument();
-    
-    // Check if permissions are rendered correctly
+
     expect(screen.getByText(/Create Users, Delete Users/)).toBeInTheDocument();
     expect(screen.getByText(/View Content/)).toBeInTheDocument();
   });
@@ -63,19 +61,15 @@ describe('RoleList Component', () => {
 
   it('calls onEdit with the correct role when edit button is clicked', () => {
     render(<RoleList roles={sampleRoles} onEdit={mockOnEdit} />);
-    
-    // Get all edit buttons
+
     const editButtons = screen.getAllByText('Edit');
     
-    // Click the first edit button (Admin role)
     fireEvent.click(editButtons[0]);
     expect(mockOnEdit).toHaveBeenCalledWith(sampleRoles[0]);
     
-    // Click the second edit button (User role)
     fireEvent.click(editButtons[1]);
     expect(mockOnEdit).toHaveBeenCalledWith(sampleRoles[1]);
     
-    // Verify the number of times onEdit was called
     expect(mockOnEdit).toHaveBeenCalledTimes(2);
   });
 
@@ -88,17 +82,14 @@ describe('RoleList Component', () => {
 
   it('applies correct styling classes', () => {
     render(<RoleList roles={sampleRoles} onEdit={mockOnEdit} />);
-    
-    // Check if the empty state has correct styling when no roles
+
     render(<RoleList roles={[]} onEdit={mockOnEdit} />);
     const emptyState = screen.getByText('No roles found.').parentElement;
     expect(emptyState).toHaveClass('p-6', 'bg-yellow-50', 'border', 'border-yellow-200', 'rounded-lg', 'text-center');
     
-    // Check if role containers have correct styling
     const roleContainers = document.querySelectorAll('.bg-white.border.rounded-lg');
     expect(roleContainers).toHaveLength(2);
     
-    // Check if edit buttons have correct styling
     const editButtons = screen.getAllByText('Edit');
     editButtons.forEach(button => {
       expect(button).toHaveClass(
