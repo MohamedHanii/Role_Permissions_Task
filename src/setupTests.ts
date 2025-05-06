@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
 
-// Polyfill for TextEncoder/TextDecoder
+
 if (typeof global.TextEncoder === 'undefined') {
   class TextEncoderPolyfill {
     encode(str: string) {
@@ -24,7 +24,6 @@ if (typeof global.TextDecoder === 'undefined') {
   global.TextDecoder = TextDecoderPolyfill as any;
 }
 
-// Automatically cleanup after each test
 afterEach(() => {
   cleanup();
 }); 

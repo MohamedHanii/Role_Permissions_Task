@@ -1,15 +1,27 @@
-// src/store/features/rolesSlice.ts
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { MockRoleService } from '../services/Role/MockRoleService';
 import type { Role, Permission } from '../types/role';
 
-const service = new MockRoleService();
+let service: MockRoleService;
 
-export const fetchRoles = createAsyncThunk('roles/fetch', () => service.getRoles());
-export const fetchPermissions = createAsyncThunk('roles/fetchPerms', () => service.getPermissions());
+export const initializeService = (roleService: MockRoleService) => {
+  service = roleService;
+};
+
+export const fetchRoles = createAsyncThunk('roles/fetch', () => {
+  if (!service) throw new Error('Service not initialized');
+  return service.getRoles();
+});
+
+export const fetchPermissions = createAsyncThunk('roles/fetchPerms', () => {
+  if (!service) throw new Error('Service not initialized');
+  return service.getPermissions();
+});
+
 export const savePermissions = createAsyncThunk(
   'roles/savePerms',
   async ({ roleId, permissions }: { roleId: string; permissions: Permission[] }) => {
+    if (!service) throw new Error('Service not initialized');
     return service.setPermissionsForRole(roleId, permissions);
   }
 );

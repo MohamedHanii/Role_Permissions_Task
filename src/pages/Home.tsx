@@ -27,25 +27,25 @@ const Home: React.FC = () => {
     if (error) toast.error(error);
   }, [error]);
 
-
   const handleEdit = (role: Role) => {
     setSelectedRoleId(role.id);
     setIsModalOpen(true);
   };
 
-  const handleSave = (updated: Permission[]) => {
+  const handleSave = async (updated: Permission[]) => {
     if (!selectedRoleId) return;
-    dispatch(updateRolePermissions({ roleId: selectedRoleId, permissions: updated }))
-      .unwrap()
-      .then(() => toast.success('Permissions updated'))
-      .catch(e => toast.error(e.message));
-
-    setIsModalOpen(false);
-    setSelectedRoleId(null);
+    try {
+      await dispatch(updateRolePermissions({ roleId: selectedRoleId, permissions: updated })).unwrap();
+      toast.success('Permissions updated');
+      setIsModalOpen(false);
+      setSelectedRoleId(null);
+    } catch (e: any) {
+      toast.error(e.message);
+    }
   };
 
   if (loading) return <p className="p-6 text-center">Loading roles…</p>;
-  
+
   return (
     <div>
       <NavBar />

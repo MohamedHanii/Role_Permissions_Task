@@ -6,13 +6,10 @@ import RequireAuth from './providers/Auth/RequireAuth';
 function App() {
   return (
     <Routes>
-      {/* Public Routes */}
       <Route path="/login" element={<Login />} />
-
       <Route element={<RequireAuth />}>
         <Route path="/" element={<Home />} />
       </Route>
-     
     </Routes>
   );
 }
