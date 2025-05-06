@@ -77,27 +77,6 @@ Run tests with coverage report:
 npm test -- --coverage
 ```
 
-### Service Tests
-
-The service tests verify the core business logic:
-
-1. Authentication Service Tests:
-   - User login validation
-   - Session management
-   - Token handling
-   - Error scenarios for invalid credentials
-
-2. Role Service Tests:
-   - Fetching roles and permissions
-   - Updating role permissions
-   - Error handling for invalid operations
-   - Simulated network delays and failures
-
-3. Utility Function Tests:
-   - Delayed promise resolution
-   - Random rejection simulation
-   - Error handling utilities
-
 ## Tech Stack
 
 - React 18
