@@ -1,6 +1,6 @@
 # Role Management System
 
-A modern React TypeScript application for managing user roles and permissions with a clean, responsive UI.
+A React TypeScript application for managing user roles and permissions with a clean, responsive UI.
 
 ## Running the Project
 
