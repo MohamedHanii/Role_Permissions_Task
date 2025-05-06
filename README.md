@@ -1,6 +1,6 @@
 # Role Management System
 
-A React TypeScript application for managing user roles and permissions with a clean, responsive UI.
+A React TypeScript application for managing user roles and permissions.
 
 ## Running the Project
 
@@ -76,39 +76,6 @@ Run tests with coverage report:
 ```bash
 npm test -- --coverage
 ```
-
-Run specific test suites:
-```bash
-# Test authentication service
-npm test src/services/auth/MockAuthService.test.ts
-
-# Test role service
-npm test src/services/Role/MockRoleService.test.ts
-
-# Test utility functions
-npm test src/utils/delayed.test.ts
-```
-
-### Service Tests
-
-The service tests verify the core business logic:
-
-1. Authentication Service Tests:
-   - User login validation
-   - Session management
-   - Token handling
-   - Error scenarios for invalid credentials
-
-2. Role Service Tests:
-   - Fetching roles and permissions
-   - Updating role permissions
-   - Error handling for invalid operations
-   - Simulated network delays and failures
-
-3. Utility Function Tests:
-   - Delayed promise resolution
-   - Random rejection simulation
-   - Error handling utilities
 
 ## Tech Stack
 
