@@ -1,5 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import rolesReducer from './rolesSlice';
+import rolesReducer, { initializeService } from './rolesSlice';
+import { MockRoleService } from '../services/Role/MockRoleService';
+
+const roleService = new MockRoleService();
+initializeService(roleService);
 
 export const store = configureStore({
   reducer: { roles: rolesReducer }
